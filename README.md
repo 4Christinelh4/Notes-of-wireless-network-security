@@ -1,4 +1,4 @@
-# notes on network security.
+# notes on network security
 # topics:
 1. symmetric/ asymmetric encryption
 2. digital signatures
