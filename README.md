@@ -1,6 +1,6 @@
 # notes on network security
 # overview
-1. symmetric/ asymmetric encryption, hash, digital signatures
+## symmetric/ asymmetric encryption, hash, digital signatures
 DES encryption and decryption in CBC mode
 
 ```
@@ -36,11 +36,9 @@ f_out= open(out_file, 'wb')
 plain_text = f_in.read()
 
 plain_len = len(plain_text)
-print("plain_len = " + str(plain_len))
 
 if plain_len  % 8 != 0:
     to_add =  (plain_len // 8) * 8 + 8 - plain_len
-    print("to_add = " + str(to_add))
     plain_text += '\0' * to_add
 
 c_text = des1.encrypt(plain_text.encode("latin-1"))
@@ -56,23 +54,38 @@ if msg.decode("latin-1") == plain_text:
 print('=' * 100)
 ```
 performance measurements
+`RSA is assymetric and it's slower than aes/des. `
 
-2. explanations and examples on DH and RSA key exchange
-3. WEP WPA
-4. kerberos
-5. PGP
-6. SSL/ TLS (security at transport layer)
+## explanations and examples on DH and RSA key exchange
+## WEP WPA
+To check which wireless networks are around: paramater is the name of the wireless interface
+`airodump-ng wlan0`
+To crack the key based on the collected handshake messages
+```
+sudo aircrack-ng -w <word dictionary path> -b <BBSID of target AP> ~/*.cap
+```
+`*.cap` are the files containing the handshake
 
+## kerberos
+## PGP
+## SSL/ TLS (security at transport layer)
+## MiTM (man in the middle) attacks and examples and evil twin attacks
+## IPSec (security at network layer)
+## 802.1x (data link layer) and attacks on data link layer (MAC spoofing, ARP spoofing, VLAN hopping, switch poisoning attack)
+## firewalls and IDS
+### snort examples
+`log tcp any any -> 192.168.1.0/24 23`
+Logs TCP traffic coming from any IP address and any source port to this network where the destination port is 23.
 
-7. MiTM (man in the middle) attacks and examples
-8. evil twin attacks
-9. IPSec (security at network layer)
-10. 802.1x (data link layer) and attacks on data link layer (MAC spoofing, ARP spoofing, VLAN hopping, switch poisoning attack)
-11. firewalls and IDS
-12. DNS security
-13. attacks on DNS (DNS hijacking, DNS spoofing, DNS exfiltration, DNS amplification attack, DoS, DDoS)
-14. broadcast security
-15. distributed energy resource
-16. zero trust architecture
+`alert tcp !192.168.1.0/24 any -> 192.168.1.0/24 !:1024`
+! is the negation operator, so this rule tells Snort to alert every TCP packets except
+(1) if the tcp packet is *from* 192.168.1.0/24 (i.e.: 192.168.1.0 - 192.168.0.255), or 
+(2) if the tcp packet is *to* port less than or equal to port 1024 of 192.168.1.0/24
+
+## DNS security
+## attacks on DNS (DNS hijacking, DNS spoofing, DNS exfiltration, DNS amplification attack, DoS, DDoS)
+## broadcast security
+## distributed energy resource
+## zero trust architecture
 
 
